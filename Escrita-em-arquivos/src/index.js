@@ -14,17 +14,23 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
     const {nome, idade} = req.body;
     
-    const teste = await fs.readFile('./src/usuarios.json');
+    try{
+        const teste = await fs.readFile('./src/usuarios.json');
 
-    const pessoas = JSON.parse(teste);
+        const pessoas = JSON.parse(teste);
 
-    pessoas.push({ nome, idade});
+        pessoas.push({ nome, idade});
 
-    const pessoasStringfy = JSON.stringify(pessoas);
+        const pessoasStringfy = JSON.stringify(pessoas);
 
-    await fs.writeFile('./src/usuarios.json', pessoasStringfy);
+        await fs.writeFile('./src/usuarios.json', pessoasStringfy);
 
-    return res.json('Pessoa cadastrada com sucesso!')
+        return res.json('Pessoa cadastrada com sucesso!');
+    } catch (erro) {
+        return res.json(`Deu erro: ${erro.message}`);
+    } finally {
+        console.log('Isso sempre será executado')
+    }
 
 })
 
